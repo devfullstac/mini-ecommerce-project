@@ -1,0 +1,118 @@
+<h2 class="mb-4">⚙️ Admin Dashboard (Product Management - CRUD)</h2>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow p-3">
+            <h5 class="mb-3">{{ isEditing ? '✏️ Edit Product' : '➕ Add New Product' }}</h5>
+
+            <div>
+                <div class="mb-2">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="currentProduct.name"
+                        placeholder="e.g. Gaming Mouse">
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Price (TND)</label>
+                    <input type="number" class="form-control" [(ngModel)]="currentProduct.price" placeholder="e.g. 120">
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Image URL (Optional)</label>
+                    <input type="text" class="form-control" [(ngModel)]="currentProduct.image"
+                        placeholder="https://...">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" rows="2" [(ngModel)]="currentProduct.description"
+                        placeholder="Product details..."></textarea>
+                </div>
+
+                <button type="button" class="btn w-100" [ngClass]="isEditing ? 'btn-warning' : 'btn-success'"
+                    (click)="saveProduct()">
+                    {{ isEditing ? 'Save Changes' : 'Add Product' }}
+                </button>
+
+                <button *ngIf="isEditing" type="button" class="btn btn-secondary w-100 mt-2" (click)="resetForm()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card shadow p-3">
+            <h5 class="mb-3">Product List</h5>
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let p of products">
+                        <td class="fw-bold">{{ p.name }}</td>
+                        <td>{{ p.price }} TND</td>
+                        <td>{{ p.description }}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-warning me-2"
+                                (click)="editProduct(p)">Edit</button>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                (click)="deleteProduct(p.id)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<hr class="my-5">
+<div class="row">
+    <div class="col-md-7 mb-4">
+        <div class="card shadow p-3">
+            <h4 class="text-primary mb-3">📦 Customer Orders (Commandes)</h4>
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Address / Phone</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let o of allOrders">
+                        <td>{{ o.User?.username }}</td>
+                        <td class="fw-bold">{{ o.Product?.name }}</td>
+                        <td>{{ o.quantity }}</td>
+                        <td><small>{{ o.address }} ({{ o.phone }})</small></td>
+                        <td>
+                            <span class="badge me-2"
+                                [ngClass]="o.status === 'Delivered' ? 'bg-success' : 'bg-warning text-dark'">{{ o.status
+                                }}</span>
+                            <button *ngIf="o.status !== 'Delivered'" class="btn btn-xs btn-outline-success btn-sm"
+                                (click)="markDelivered(o.id)">✔ Deliver</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-5 mb-4">
+        <div class="card shadow p-3">
+            <h4 class="text-danger mb-3">❤️ Customer Favorites</h4>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between" *ngFor="let f of allFavorites">
+                    <span><strong>{{ f.User?.username }}</strong> liked <strong>{{ f.Product?.name }}</strong></span>
+                    <span class="text-success">{{ f.Product?.price }} TND</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

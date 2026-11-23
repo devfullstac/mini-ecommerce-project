@@ -1,0 +1,63 @@
+<h2 class="mb-4">👤 Welcome, {{ username }} (My User Space)</h2>
+
+<div class="row">
+    <!-- القسم الأول: قائمة طلبياتي (My Orders) -->
+    <div class="col-md-7 mb-4">
+        <div class="card shadow p-3">
+            <h4 class="mb-3 text-primary">📦 My Orders (Mes Commandes)</h4>
+
+            <div *ngIf="orders.length === 0" class="alert alert-light border">
+                You haven't placed any orders yet.
+            </div>
+
+            <table *ngIf="orders.length > 0" class="table table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th>Address & Phone</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let o of orders">
+                        <td class="fw-bold">{{ o.Product?.name || 'Product #' + o.productId }}</td>
+                        <td>{{ o.quantity }}</td>
+                        <td class="text-success fw-bold">{{ (o.Product?.price || 0) * o.quantity }} TND</td>
+                        <td><small>{{ o.address }}<br>{{ o.phone }}</small></td>
+                        <td><span class="badge bg-warning text-dark">{{ o.status }}</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- القسم الثاني: قائمة المفضلة (My Favorites) -->
+    <div class="col-md-5 mb-4">
+        <div class="card shadow p-3">
+            <h4 class="mb-3 text-danger">❤️ My Favorites</h4>
+
+            <div *ngIf="favorites.length === 0" class="alert alert-light border">
+                No favorite products saved yet.
+            </div>
+
+            <div class="list-group" *ngIf="favorites.length > 0">
+                <div class="list-group-item d-flex justify-content-between align-items-center"
+                    *ngFor="let fav of favorites">
+                    <div>
+                        <h6 class="mb-0 fw-bold">{{ fav.Product?.name }}</h6>
+                        <small class="text-success">{{ fav.Product?.price }} TND</small>
+                    </div>
+                    <div>
+                        <a [routerLink]="['/product', fav.productId]"
+                            class="btn btn-sm btn-outline-primary me-2">Order</a>
+                        <button type="button" class="btn btn-sm btn-outline-danger"
+                            (click)="removeFavorite(fav.productId)">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 mb-4">
+    <a class="navbar-brand fw-bold" routerLink="/products">🛒 Mini Store</a>
+
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/products" routerLinkActive="active">Products</a>
+            </li>
+
+            <!-- يظهر رابط السلة للزوار والمستخدمين فقط ويختفي عن الأدمن -->
+            <li class="nav-item" *ngIf="!authService.isAdmin()">
+                <a class="nav-link text-success fw-bold" routerLink="/cart">🛒 Cart ({{ cartService.getCount() }})</a>
+            </li>
+
+            <!-- يظهر للمستخدم العادي المسجل للدخول -->
+            <li class="nav-item" *ngIf="authService.isLoggedIn() && !authService.isAdmin()">
+                <a class="nav-link text-info fw-bold" routerLink="/user-space" routerLinkActive="active">My Space
+                    (Orders & Favorites)</a>
+            </li>
+
+            <!-- يظهر للـ Admin فقط -->
+            <li class="nav-item" *ngIf="authService.isAdmin()">
+                <a class="nav-link text-warning fw-bold" routerLink="/admin" routerLinkActive="active">Admin
+                    Dashboard</a>
+            </li>
+        </ul>
+
+        <div class="d-flex">
+            <ng-container *ngIf="!authService.isLoggedIn()">
+                <a class="btn btn-outline-light me-2" routerLink="/login">Login</a>
+                <a class="btn btn-primary" routerLink="/register">Register</a>
+            </ng-container>
+
+            <button *ngIf="authService.isLoggedIn()" class="btn btn-danger" (click)="logout()">
+                Logout
+            </button>
+        </div>
+    </div>
+</nav>
